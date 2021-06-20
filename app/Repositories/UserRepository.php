@@ -21,6 +21,16 @@ class UserRepository
                 })->get()->random($num);
     }
 
+    public function getAuth()
+    {
+        return auth()->user();
+    }
+
+    public function getAuthId()
+    {
+        return auth()->id();
+    }
+
     public function getAuthRooms()
     {
         return auth()->user()->rooms();

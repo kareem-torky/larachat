@@ -2,15 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Events\PublicMessageSent;
+use App\Services\PublicRoomService;
+use App\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
 
 class PublicRoomController extends Controller
 {
+    public function __construct(private PublicRoomService $publicRoomService,private UserService $userService)
+    {
+    }
+
     public function get()
     {
-        $user = auth()->user();
+        $user = $this->userService->getAuth();
 
         $data = [
             'user' => $user,
@@ -22,9 +26,7 @@ class PublicRoomController extends Controller
     public function send(Request $request)
     {
         $message = $request->message;
-        $sender = Auth::user();
-
-        PublicMessageSent::dispatch($message, $sender);
+        $this->publicRoomService->sendAndStore($message);
 
         return response()->json('message sent successfully');
     }
