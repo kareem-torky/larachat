@@ -2,28 +2,27 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Room;
 use App\Models\User;
+use App\Services\UserService;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
-    public function index()
+    public function __construct(private UserService $userService)
     {
-        $rooms = Auth::user()->rooms();
+    }
 
-        $users = User::where('id', '!=', auth()->id())
-            ->whereNotIn('id', function($query) {
-                $query->select('user_one')->from('rooms')->where('user_two', auth()->id());
-            })->whereNotIn('id', function($query) {
-                $query->select('user_two')->from('rooms')->where('user_one', auth()->id());
-            })->get()->random(5);
+    public function index(Request $request)
+    {
+        $rooms = $this->userService->getAuthRooms();
+
+        $users = $this->userService->getsearchResultsOrSuggestions($request->search);
 
         $data = [
             'rooms' => $rooms,
             'users' => $users,
+            'search' => $request->search,
         ];
 
         return view('home.index')->with($data);

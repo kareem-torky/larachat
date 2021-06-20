@@ -31,9 +31,24 @@
 
     <div class="col-md-8">
         <div class="d-flex flex-column align-items-stretch flex-shrink-0 bg-white">
-            <a href="#" class="d-flex align-items-center flex-shrink-0 py-3 link-dark text-decoration-none border-bottom disabled">
-                <span class="fs-5 fw-semibold">User suggestions</span>
-            </a>
+            <div class="d-flex align-items-center justify-content-between flex-shrink-0 py-3 link-dark text-decoration-none border-bottom">
+                <span class="fs-5 fw-semibold">
+                    @if ($search)
+                        Search results
+                    @else
+                        User suggestions
+                    @endif
+                </span>
+
+                <span>
+                    <form action="{{ route('home.index') }}" method="get">
+                        <div class="input-group">
+                            <input type="text" name="search" value="{{ $search }}" class="form-control" aria-label="Search keyword" aria-describedby="search-users-input">
+                            <button class="btn btn-outline-secondary" type="submit" id="search-users-input">Search</button>
+                        </div>
+                    </form>
+                </span>
+            </div>
 
             <table class="table">
                 <thead>
