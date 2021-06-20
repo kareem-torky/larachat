@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 
 class HomeController extends Controller
 {
-    public function __construct(private UserService $userService)
-    {
-    }
+    public function __construct(
+        private UserService $userService
+    ){}
 
     public function index(Request $request)
     {

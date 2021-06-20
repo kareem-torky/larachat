@@ -8,9 +8,10 @@ use Illuminate\Http\Request;
 
 class PublicRoomController extends Controller
 {
-    public function __construct(private PublicRoomService $publicRoomService,private UserService $userService)
-    {
-    }
+    public function __construct(
+        private PublicRoomService $publicRoomService,
+        private UserService $userService
+    ){}
 
     public function get()
     {

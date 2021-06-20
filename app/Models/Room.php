@@ -22,11 +22,20 @@ class Room extends Model
         return $this->belongsTo(User::class, 'user_two', 'id');
     }
 
-    public function users()
+    public function messages()
     {
-        return User::where('id', $this->user_one)
-            ->orWhere('id', $this->user_two)
-            ->get();
+        return $this->hasMany(Message::class);
+    }
+
+    // TODO: will be refactored later
+    public function getRecipientFor($id)
+    {
+        return ($this->user_one == $id) ? User::find($this->user_two) : User::find($this->user_one);
+    }
+
+    public function getRecipientForAuthId()
+    {
+        return $this->getRecipientFor(auth()->id());
     }
 
     public function hasUser($id)
@@ -34,18 +43,4 @@ class Room extends Model
         return (($this->user_one == $id) or ($this->user_two == $id));
     }
 
-    public function getRecipient($id)
-    {
-        return ($this->user_one == $id) ? User::find($this->user_two) : User::find($this->user_one);
-    }
-
-    public function getRecipientForAuthId()
-    {
-        return ($this->user_one == auth()->id()) ? User::find($this->user_two) : User::find($this->user_one);
-    }
-
-    public function messages()
-    {
-        return $this->hasMany(Message::class);
-    }
 }
