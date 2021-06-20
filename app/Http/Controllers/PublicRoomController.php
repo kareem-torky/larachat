@@ -15,9 +15,11 @@ class PublicRoomController extends Controller
     public function get()
     {
         $user = $this->userService->getAuth();
+        $latestMessages = $this->publicRoomService->getLatestMessages();
 
         $data = [
             'user' => $user,
+            'latestMessages' => $latestMessages,
         ];
 
         return view('rooms.public')->with($data);

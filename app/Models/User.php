@@ -47,4 +47,9 @@ class User extends Authenticatable
             ->orWhere('user_two', $this->id)
             ->get();
     }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 }

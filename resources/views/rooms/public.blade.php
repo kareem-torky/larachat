@@ -7,16 +7,22 @@
                 <span class="fs-5 fw-semibold">Public room</span>
             </a>
 
-            <div id="message-box">
-
-            </div>
-
             <form id="message-form">
                 @csrf
                 <textarea name="message" class="form-control mb-3" placeholder="Your message here ..."></textarea>
 
-                <input type="submit" class="btn btn-primary" value="send">
+                <input type="submit" class="btn btn-primary mb-3" value="send">
             </form>
+
+            <div id="message-box">
+                @foreach ($latestMessages as $message)
+                    @if($message->user_id == $user->id)
+                        <p class='bg-primary rounded w-75 me-auto text-light p-3'>{{ $message->content }}</p>
+                    @else
+                        <p class='bg-light rounded w-75 ms-auto p-3'>{{ $message->user->name }}: {{ $message->content }}</p>
+                    @endif
+                @endforeach
+            </div>
         </div>
     </div>
 @endsection
@@ -28,9 +34,9 @@
         Echo.private(`public-room`)
         .listen('PublicMessageSent', (e) => {
             if (e.sender.name == authUserName) {
-                $('#message-box').append(`<p class='bg-primary rounded w-75 me-auto text-light p-3'>${e.message}</p>`)
+                $('#message-box').prepend(`<p class='bg-primary rounded w-75 me-auto text-light p-3'>${e.message}</p>`)
             } else {
-                $('#message-box').append(`<p class='bg-light rounded w-75 ms-auto p-3'>${e.sender.name}: ${e.message}</p>`)
+                $('#message-box').prepend(`<p class='bg-light rounded w-75 ms-auto p-3'>${e.sender.name}: ${e.message}</p>`)
             }
         });
 

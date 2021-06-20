@@ -3,12 +3,18 @@
 namespace App\Services;
 
 use App\Events\PublicMessageSent;
+use App\Repositories\MessageRepository;
 use App\Repositories\UserRepository;
 
 class PublicRoomService
 {
-    public function __construct(private UserRepository $userRepository)
+    public function __construct(private UserRepository $userRepository, private MessageRepository $messageRepository)
     {
+    }
+
+    public function getLatestMessages($num = 10)
+    {
+        return $this->messageRepository->getLatest($num);
     }
 
     public function sendAndStore(string $message)
@@ -17,6 +23,6 @@ class PublicRoomService
 
         PublicMessageSent::dispatch($message, $sender);
 
-        // TODO: store in db
+        $this->messageRepository->store($message, $sender->id);
     }
 }

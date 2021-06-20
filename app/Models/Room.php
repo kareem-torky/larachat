@@ -43,4 +43,9 @@ class Room extends Model
     {
         return ($this->user_one == auth()->id()) ? User::find($this->user_two) : User::find($this->user_one);
     }
+
+    public function messages()
+    {
+        return $this->hasMany(Message::class);
+    }
 }
